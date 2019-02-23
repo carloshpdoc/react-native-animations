@@ -8,44 +8,30 @@
  */
 
 import React, { Component } from "react";
-import { StyleSheet, View, Animated, Text, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View, Animated, TouchableWithoutFeedback } from "react-native";
 
 export default class animations extends Component {
   state = {
-    animation: new Animated.Value(0),
+    animation: new Animated.Value(150),
   };
   startAnimation = () => {
     Animated.timing(this.state.animation, {
-      toValue: 360,
+      toValue: 300,
       duration: 1500
     }).start(() => {
-      this.state.animation.setValue(0);
+      this.state.animation.setValue(150);
     });
   }
   
   render() {
-
-    const rotateInterpolate = this.state.animation.interpolate({
-      inputRange: [0, 360],
-      outputRange: ["0deg", "360deg"],
-      //outputRange: ["0deg", "180deg"],
-      // outputRange: ["0deg", "-360deg"],
-      // outputRange: ["0deg", "1080deg"],
-    });
-
     const animatedStyles = {
-      transform: [
-        { rotate: rotateInterpolate },
-        // { rotateX: rotateInterpolate },
-        // { rotateY: rotateInterpolate },
-      ]
+      width: this.state.animation,
+      height: this.state.animation,
     }
     return (
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={this.startAnimation}>
-          <Animated.View style={[styles.box, animatedStyles]}>
-            <Text>Hello Rotate!</Text>
-          </Animated.View>
+          <Animated.View style={[styles.box, animatedStyles]} />
         </TouchableWithoutFeedback>
       </View>
     );
@@ -60,10 +46,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   box: {
-    width: 150,
-    height: 150,
+    // width: 150,
+    // height: 150,
     backgroundColor: "tomato",
-    alignItems: "center",
-    justifyContent: "center",
   }
 });

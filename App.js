@@ -7,47 +7,66 @@
  * @lint-ignore-every XPLATJSCOPYRIGHT1
  */
 
-import React, { Component } from "react";
-import { StyleSheet, View, Animated, TouchableWithoutFeedback } from "react-native";
+import React, { Component } from 'react';
+import { AppRegistry, StyleSheet, Text, View, TouchableWithoutFeedback, Animated } from 'react-native';
 
-export default class animations extends Component {
-  state = {
-    animation: new Animated.Value(150),
-  };
-  startAnimation = () => {
-    Animated.timing(this.state.animation, {
-      toValue: 300,
-      duration: 1500
-    }).start(() => {
-      this.state.animation.setValue(150);
-    });
+export default class animatedbasic extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handlePressIn = this.handlePressIn.bind(this);
+    this.handlePressOut = this.handlePressOut.bind(this);
   }
   
+  componentWillMount() {
+    this.animatedValue = new Animated.Value(1);
+  }
+  
+  handlePressIn() {
+    Animated.spring(this.animatedValue, {
+      toValue: .5
+    }).start()
+  }
+  handlePressOut() {
+    Animated.spring(this.animatedValue, {
+      toValue: 1,
+      friction: 3,
+      tension: 40
+    }).start()
+  }
   render() {
-    const animatedStyles = {
-      width: this.state.animation,
-      height: this.state.animation,
+    const animatedStyle = {
+      transform: [{ scale: this.animatedValue}]
     }
     return (
       <View style={styles.container}>
-        <TouchableWithoutFeedback onPress={this.startAnimation}>
-          <Animated.View style={[styles.box, animatedStyles]} />
+        <TouchableWithoutFeedback
+          onPressIn={this.handlePressIn}
+          onPressOut={this.handlePressOut}
+        >
+          <Animated.View style={[styles.button, animatedStyle]}>
+            <Text style={styles.text}>Press Me</Text>
+          </Animated.View>
         </TouchableWithoutFeedback>
       </View>
     );
-
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: "#333",
+    width: 100,
+    height: 50,
     alignItems: "center",
     justifyContent: "center",
   },
-  box: {
-    // width: 150,
-    // height: 150,
-    backgroundColor: "tomato",
+  text: {
+    color: "#FFF"
   }
 });
